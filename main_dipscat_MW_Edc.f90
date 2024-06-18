@@ -37,11 +37,7 @@
      &         ' including static electric and MW fields')
 
         write(*,2)
-    2   format(/" The two molecules can be different or in",&
-     &          " different electronic states")
-
-        write(*,3)
-    3   format(/" Basis set is symmetrized product of dc field",&
+    2   format(/" Basis set is symmetrized product of dc field",&
      &          " dressed states of diatoms and photon states,"/& 
      &          " which in general reads |til{n}1 mn1>|til{n}2 mn2>|N>")
 
