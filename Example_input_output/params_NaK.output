@@ -1,4 +1,4 @@
-13:20:54  16/ 6/2024
+16: 1:27  19/ 6/2024
 
  Program to calculate adiabats as a function of R and theta for dipolar scattering
  including static electric and MW fields
@@ -91,7 +91,7 @@
    -8.8399E+01   -5.2200E+01   -5.2200E+01   -8.0000E+00    2.8200E+01    2.8200E+01    7.2399E+01
  No. of R steps:       961
 
- Time (s) in R loop:    3.30E-02
+ Time (s) in R loop:    4.40E-02
 
  Adiabats written to file 'calculated_adiabats.dat'
 

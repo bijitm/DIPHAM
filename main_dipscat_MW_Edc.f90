@@ -77,12 +77,9 @@
         ! Some checks on input params
         if (brot<0d0) stop "Rotational constant not supplied"
         if (dipole<0d0) stop "Dipole moment not supplied"
-        if (.not.(npol==0.or.npol==1)) then
-          write(6,101)
- 101      format(/" STOP: Incorrect npol param, only allowed values", &
-                 " are 0 (Linear z) or 1 (RHC x-y plane)")
-          stop
-        endif
+        if (.not.(npol==0.or.npol==1)) stop &
+          " STOP: Incorrect npol param, only allowed values"// &
+          " are 0 (Linear z) or 1 (RHC x-y plane)"
 
         if (xi<0d0.or.xi>45d0) stop "xi must be between 0 and 45."
 
