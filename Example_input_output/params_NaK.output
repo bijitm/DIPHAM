@@ -1,0 +1,98 @@
+13:20:54  16/ 6/2024
+
+ Program to calculate adiabats as a function of R and theta for dipolar scattering
+ including static electric and MW fields
+
+ Basis set is symmetrized product of dc field dressed states of diatoms and photon states,
+ which in general reads |til{n}1 mn1>|til{n}2 mn2>|N>
+
+ Basis set uses monomer diatom nmax =  1
+
+ Dressed basis set will be constructed at reference electric field =  0.0000 kV/cm
+
+ Number of monomer basis functions =   4
+
+ Assigning a non-negative integer quantum number 'a' to represent each monomer state
+
+ Mapping of monomer quantum numbers:
+ ----------------------------- 
+       a       n       mn      
+ ----------------------------- 
+       0       0       0
+       1       1       0
+       2       1      -1
+       3       1       1
+
+ Pair Hamiltonian basis set will be constructed using user input npair and ipair.
+
+ Time (s) in pairbasis_builder:    0.00E+00
+
+  -----------------------------------------
+         Pair state quantum numbers        
+  -----------------------------------------
+      State      a1       a2      nph      
+  -----------------------------------------
+        1        0        0        0
+        2        0        1       -1
+        3        0        2       -1
+        4        0        3       -1
+        5        1        3       -2
+        6        2        3       -2
+        7        3        3       -2
+
+ Potential terms will be constructed from  1 R-dependent term(s) and  3 asymptotic term(s).
+
+ MW transition from states a_i =   0 to a_f =   3
+
+ AC electric field (kV/cm) for Rabi coupling is:  1.01E-01
+
+ VCONST (cm-1) for MW coupling is  -2.31099984E-03
+
+ Potential term  1
+
+             1           2           3           4           5           6           7
+    1   -0.00E+00
+    2    0.00E+00    8.33E-02
+    3    0.00E+00    3.06E-01   -4.17E-02
+    4    0.00E+00    3.06E-01    3.75E-01   -4.17E-02
+    5    0.00E+00    0.00E+00    0.00E+00    0.00E+00   -0.00E+00
+    6    0.00E+00    0.00E+00    0.00E+00    0.00E+00   -0.00E+00   -0.00E+00
+    7    0.00E+00    0.00E+00    0.00E+00    0.00E+00   -0.00E+00   -0.00E+00   -0.00E+00
+
+ Potential term  2
+
+             1           2           3           4           5           6           7
+    1    1.00E+00
+    2    0.00E+00    1.00E+00
+    3    0.00E+00    0.00E+00    1.00E+00
+    4    0.00E+00    0.00E+00    0.00E+00    1.00E+00
+    5    0.00E+00    0.00E+00    0.00E+00    0.00E+00    1.00E+00
+    6    0.00E+00    0.00E+00    0.00E+00    0.00E+00    0.00E+00    1.00E+00
+    7    0.00E+00    0.00E+00    0.00E+00    0.00E+00    0.00E+00    0.00E+00    1.00E+00
+
+ Potential term  3
+
+             1           2           3           4           5           6           7
+    1    0.00E+00
+    2    0.00E+00    0.00E+00
+    3    0.00E+00    0.00E+00    0.00E+00
+    4    8.16E-01    0.00E+00    0.00E+00    0.00E+00
+    5    0.00E+00    5.77E-01    0.00E+00    0.00E+00    0.00E+00
+    6    0.00E+00    0.00E+00    5.77E-01    0.00E+00    0.00E+00    0.00E+00
+    7    0.00E+00    0.00E+00    0.00E+00    8.16E-01    0.00E+00    0.00E+00    0.00E+00
+
+ Potential term  4
+
+ All elements for this potential term are zero
+
+ Time (s) in coupling:    0.00E+00
+
+ The thresholds (MHz) are
+   -8.8399E+01   -5.2200E+01   -5.2200E+01   -8.0000E+00    2.8200E+01    2.8200E+01    7.2399E+01
+ No. of R steps:       961
+
+ Time (s) in R loop:    3.30E-02
+
+ Adiabats written to file 'calculated_adiabats.dat'
+
+ Program run successfully
