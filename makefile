@@ -6,6 +6,7 @@ subroutines = monomer_mapping.f90 pairbasis_builder.f90 coupling.f90 \
 functions = c1func.f90 c2func.f90
 all_files = $(modules) $(subroutines) $(functions) $(main)
 #flags = -Wunused -fbacktrace
+#flags = -Wall -fbacktrace
 flags = -fbacktrace
 lapack_lib = -L~/lapack-3.11/ -llapack -lblas
 

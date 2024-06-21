@@ -388,7 +388,7 @@
                   if (lintdif) then
                     ! <1C|Hm|2K>*krondel(2C,1K)
                     if (ia2c==ia1k) then
-                      term  = 0d0
+                      term = 0d0
                       if (mn1c-mn2k==npol) then
                         call vmfdr(n1c,mn1c,nphc,n2k,mn2k,nphk,npol,term)
                         term = term*cos(xi)
@@ -404,7 +404,7 @@
                   if (lcoldif.and.lintdif) then
                     ! <2C|Hm|2K>*krondel(1C,1K)
                     if (ia1c==ia1k) then
-                      term  = 0d0
+                      term = 0d0
                       if (mn2c-mn2k==npol) then
                         call vmfdr(n2c,mn2c,nphc,n2k,mn2k,nphk,npol,term)
                         term = term*cos(xi)
@@ -428,7 +428,7 @@
 
           else
             write(6,'(/" The set of lambda terms:",3i4,&
-                    " will be ignored")')lm1,lm2,lm
+     &              " will be ignored")')lm1,lm2,lm
           endif
 
         enddo ! iham loop

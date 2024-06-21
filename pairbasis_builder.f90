@@ -22,7 +22,7 @@
         if (.not. allocated(evalref)) allocate(evalref(nmonbasis))
         if (.not. allocated(evecref)) &
                 allocate(evecref(nmax+1,nmax+1,nblmn))
-        if (.not. allocated(work)) allocate(work(nmax+1))
+        if (.not. allocated(work)) allocate(work(3*(nmax+1)-1))
 
         hmon    = 0.d0
         evec    = 0.d0
