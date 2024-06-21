@@ -120,7 +120,7 @@
           ! functions
           mpair = (nphmx+1)*nmonbasis*(nmonbasis+1)/2 - npair
           if (.not. allocated(imlst)) allocate(imlst(mpair,nqn))
-          imlst = -999          
+          imlst = -999
 
           ! Now store the information of the functions excluded from
           ! the restricted basis set

@@ -598,7 +598,7 @@
         ! Calculates the dipole-dipole matrix element in the dressed
         ! rotor basis set
         use dipole_module, only: mnidx, ndim, nnidx, jqn, nmax, &
-                evecref, zero, theta
+                evecref, zero, theta, phi
         implicit none
         integer, intent(in) :: n1c, mn1c, n2c, mn2c, n1r, mn1r, n2r, mn2r
         real*8, intent(in)  :: anormc, anormr
@@ -690,7 +690,8 @@
 
                term = evecref(i1c,in1c,ib1c)*evecref(i2c,in2c,ib2c)* &
                       evecref(i1r,in1r,ib1r)*evecref(i2r,in2r,ib2r)* &
-                      elem*anormc*anormr*c2func(-(mn1dif+mn2dif),theta)
+                      elem*anormc*anormr* &
+                      c2func(-(mn1dif+mn2dif),theta,phi)
 
                vcoup = vcoup+term
 
@@ -746,7 +747,8 @@
 
                term = evecref(i1c,in1c,ib1c)*evecref(i2c,in2c,ib2c)* &
                       evecref(i1r,in2r,ib2r)*evecref(i2r,in1r,ib1r)* &
-                      elem*anormc*anormr*c2func(-(mn1dif+mn2dif),theta)
+                      elem*anormc*anormr* &
+                      c2func(-(mn1dif+mn2dif),theta,phi)
 
                vcoup = vcoup+term
 

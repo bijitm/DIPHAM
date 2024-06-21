@@ -2,8 +2,8 @@
         use dipole_module, only: npair, ipair, nmax, nmonbasis, iqn, &
                            nqn, frot, ffld, lrstrct, nphmx, evalref, &
                            itrns, etrns, fdlt, fomg, mxlam, nvlblk, &
-                           lambda, jlevel, theta, npol, nconst, xi, &
-                           zero, npower
+                           lambda, jlevel, theta, phi, xi, npol, &
+                           nconst, zero, npower
         use constants, only: MHz_to_inv_cm, fstark, pi
         implicit none
         integer :: ia, n, mn, ii, k, ia1, ia2, nph, np, mnp, &
@@ -21,9 +21,9 @@
         integer :: info
 
         namelist/params/nmax, npair, ipair, nphmx, npol, brot, &
-                        dipole, omega, delta, xi, theta, eflddc, itrns,&
+                        dipole, omega, delta, xi, theta, phi, eflddc, &
                         mxlam, lambda, npower, a, rmin, rmax, dr, &
-                        iref, ldeng
+                        iref, ldeng, itrns
 
         ! Get date and time
         call date_and_time (b(1),b(2),b(3),idate_time)
@@ -54,6 +54,7 @@
         delta  = 0.d0   ! MW detuning (2pixMHz)
         xi     = 0.d0   ! in units of degree
         theta  = 0.d0   ! in units of degree
+        phi    = 0.d0   ! in units of degree
         eflddc = 0.d0   ! DC electric field in kV/cm
         itrns  = (/0,1/)! ITRNS array defines the two monomer dressed 
                         ! states for the MW transition
@@ -86,10 +87,6 @@
         if (abs(xi)>zero.and.npol==0) stop &
         "xi is non-zero: cannot have z-polarization (npol=0)"
 
-        ! Convert angles from degrees to radians
-        theta = theta*pi/180d0
-        xi    = xi*pi/180d0
-
         ! Important prefactors (in cm-1)
         frot = brot*MHz_to_inv_cm
         ffld = -eflddc*dipole*fstark  ! (kV/cm)*debye*(1/kV/debye)
@@ -105,6 +102,14 @@
 
         write(*,104) nmonbasis
  104    format(/' Number of monomer basis functions =',i4)
+
+        write(*,109) theta, phi
+ 109    format(/' Theta and phi in degrees are ',f5.1," and ",f5.1)
+
+        ! Convert angles from degrees to radians
+        theta = theta*pi/180d0
+        phi   = phi*pi/180d0
+        xi    = xi*pi/180d0
 
         ! Flag for restricted basis set
         lrstrct = .false.
@@ -178,6 +183,8 @@
           ! First calculate angular part
           write(6,48) itrns(1), itrns(2)
   48      format(/" MW transition from states a_i =",i4," to a_f =",i4)
+          write(6,49) xi*180d0/pi
+  49      format(/" Ellipticity xi in degrees =",f6.1)
           n   = iqn(itrns(1)+1,1)
           mn  = iqn(itrns(1)+1,2)
           np  = iqn(itrns(2)+1,1)
@@ -241,7 +248,7 @@
                   3*npair-1,info)
           write(10,'(1x,f10.2,50es14.4)') r, &
                   (eval-thrshvals(iref))/MHz_to_inv_cm
-          if (ldeng) call effective_pot(r,theta,0d0,xi,omega,delta,&
+          if (ldeng) call effective_pot(r,theta,phi,xi,omega,delta,&
                   dipole,veff)
           if (ldeng) write(20,'(1x,f10.2,es14.4)') r,veff/MHz_to_inv_cm
           r = r+dr

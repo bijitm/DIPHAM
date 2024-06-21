@@ -7,7 +7,7 @@
          real*8,  parameter :: zero = 1d-12
          integer :: nmax, npair, nmonbasis, nblmn, nphmx, mpair, &
                  itrns(2), mxlam, nvlblk, npol, npower(100)
-         real*8  :: frot, ffld, fdlt, fomg, etrns, theta, xi
+         real*8  :: frot, ffld, fdlt, fomg, etrns, theta, phi, xi
          integer, allocatable, dimension(:) :: ipair, ndim, mnidx, &
                  lambda, jlevel
          integer, allocatable, dimension(:,:) :: iqn, jqn, nnidx, &
