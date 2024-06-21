@@ -1,4 +1,6 @@
       subroutine coupling
+        ! Calculates the angular coupling matrix elements of the 
+        ! Hamiltonian for different symmetry blocks 
         use dipole_module, only: npair, mxlam, nvlblk, lambda, vl, &
                 jlevel, nqn, iqn, lrstrct, etrns, fdlt, mpair, &
                 evalref, imlst, zero, xi, npol

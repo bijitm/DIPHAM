@@ -1,4 +1,6 @@
       subroutine monomer_mapping
+         ! Maps monomer rotor quantum numbers with indices later used
+         ! as pointers to arrays
          use dipole_module, only: nmax, nmonbasis, nblmn, iqn, jqn, &
                                   ndim, nnidx, mnidx, nqn
          implicit none

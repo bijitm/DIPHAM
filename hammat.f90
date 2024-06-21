@@ -1,4 +1,5 @@
       subroutine hammat(r,nvlblk,p,npair,elevel,wmat)
+        ! Creates the total R-dependent Hamiltonian
         use dipole_module, only: mxlam, npower, vl
         implicit none
         integer, intent(in) :: nvlblk, npair

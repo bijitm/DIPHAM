@@ -1,6 +1,9 @@
       real*8 function c1func(n,mn,np,mnp,mq)
+        ! Calculates dipole moment matrix element between
+        ! two rotational states
         implicit none
         integer, intent(in) :: n, mn, np, mnp, mq
+        ! functions
         real*8 :: thrj, threej
         c1func = 0d0
         if (mn-mnp/=mq) return

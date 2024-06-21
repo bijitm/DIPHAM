@@ -1,4 +1,8 @@
       subroutine pairbasis_builder
+        ! Creates dressed pair basis set, calculates eigenvalues and
+        ! eigenvectors of the dressed pair basis set.
+        ! Create Class-II function list to be used for Van Vleck
+        ! transformations
         use dipole_module, only: nmax, nblmn, ndim, evecref, evalref, &
                 nmonbasis, lrstrct, nqn, npair, ipair, nphmx, mpair, &
                 imlst, itrns, etrns
