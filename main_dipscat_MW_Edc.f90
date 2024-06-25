@@ -6,12 +6,11 @@
                            nconst, zero, npower
         use constants, only: MHz_to_inv_cm, fstark, pi
         implicit none
-        integer :: ia, n, mn, ii, k, ia1, ia2, nph, np, mnp, &
-                iref
+        integer :: ia, n, mn, ii, k, ia1, ia2, nph, np, mnp, iref
         integer :: itime_start, itime_end, istep
         real*8  :: brot, dipole, omega, delta, eflddc, efldac, &
                 vcoup, vconst(nconst), a(100), p(100), rmin, rmax, &
-                dr, r, veff
+                dr, r, veff, eref
         real*8  :: count_rate
         real*8, allocatable :: elevel(:), thrshvals(:), wmat(:,:), &
                 eval(:), work(:)
@@ -69,7 +68,8 @@
         rmin   = 50d0   ! all r in bohr
         rmax   = 1000d0
         dr     = 5d0    
-        iref   = 1      ! Reference pair state which will be 0 in energy
+        iref   = 0      ! Reference pair state which will be 0 in
+                        ! energy, if zero then no reference level
         ldeng  = .false.! Logical flag for writing Deng et al potential
 
         read(5,params)
@@ -143,7 +143,7 @@
         call pairbasis_builder
 
         ! Check IREF input parameter
-        if (iref<1.or.iref>npair) stop "invalid IREF"
+        if (iref<0.or.iref>npair) stop "invalid IREF"
 
         ! NPAIR and IPAIR get updated from BASIS_BUILDER
         if (.not. allocated(jlevel)) allocate(jlevel(npair*nqn))
@@ -218,6 +218,10 @@
         write (6,'(" The thresholds (MHz) are"/,50es14.4)') &
                 thrshvals/MHz_to_inv_cm
 
+        ! Define reference energy
+        eref = 0d0
+        if (iref/=0) eref = thrshvals(iref)
+
         ! Allocate a few arrays before final diagonalization
         if (.not. allocated(wmat)) allocate(wmat(npair,npair))
         if (.not. allocated(eval)) allocate(eval(npair))
@@ -246,8 +250,7 @@
           call hammat(r,nvlblk,p,npair,elevel,wmat) 
           call dsyev('N','U',npair,wmat,npair,eval,work(:3*npair-1),&
                   3*npair-1,info)
-          write(10,'(1x,f10.2,50es14.4)') r, &
-                  (eval-thrshvals(iref))/MHz_to_inv_cm
+          write(10,'(1x,f10.2,50es14.4)') r, (eval-eref)/MHz_to_inv_cm
           if (ldeng) call effective_pot(r,theta,phi,xi,omega,delta,&
                   dipole,veff)
           if (ldeng) write(20,'(1x,f10.2,es14.4)') r,veff/MHz_to_inv_cm
