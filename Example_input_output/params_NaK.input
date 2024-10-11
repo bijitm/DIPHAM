@@ -13,11 +13,12 @@ ipair  = 0,0, 0,
          3,3,-2,
 brot   = 2822.D0,     ! MHz [To reproduce curves of PRL 130, 183001 (2023)]
 dipole = 2.72,        ! debye [EPJD 65, 105 (2011)]
-omega  = 80.0,         ! 2pi x MHz
-delta  = 8.0,         ! 2pi x MHz
-npol   = 1,
-!xi     = 5.0,
-theta  = 60.0,
+omega  = 29.0,        ! 2pi x MHz
+delta  = 9.5,         ! 2pi x MHz; positive for blue-detuned; negative for red-detuned
+npol   = 1,           ! Polarization: 1:RHC_x-y,0:Li_z 
+xi     = 0.0,         ! degrees
+theta  = 90.0,        ! degrees
+phi    = 0.0,         ! degrees
 rmin   = 200.0,
 rmax   = 5000.0,
 dr     = 5.0,

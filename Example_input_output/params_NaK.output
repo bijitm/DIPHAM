@@ -1,4 +1,4 @@
-16: 1:27  19/ 6/2024
+21: 3:53  11/10/2024
 
  Program to calculate adiabats as a function of R and theta for dipolar scattering
  including static electric and MW fields
@@ -11,6 +11,8 @@
  Dressed basis set will be constructed at reference electric field =  0.0000 kV/cm
 
  Number of monomer basis functions =   4
+
+ Theta and phi in degrees are  90.0 and   0.0
 
  Assigning a non-negative integer quantum number 'a' to represent each monomer state
 
@@ -25,7 +27,7 @@
 
  Pair Hamiltonian basis set will be constructed using user input npair and ipair.
 
- Time (s) in pairbasis_builder:    0.00E+00
+ Time (s) in pairbasis_builder:    2.00E-03
 
   -----------------------------------------
          Pair state quantum numbers        
@@ -44,17 +46,19 @@
 
  MW transition from states a_i =   0 to a_f =   3
 
- AC electric field (kV/cm) for Rabi coupling is:  1.01E-01
+ Ellipticity xi in degrees =   0.0
 
- VCONST (cm-1) for MW coupling is  -2.31099984E-03
+ AC electric field (kV/cm) for Rabi coupling is:  3.67E-02
+
+ VCONST (cm-1) for MW coupling is  -8.37737442E-04
 
  Potential term  1
 
              1           2           3           4           5           6           7
     1   -0.00E+00
-    2    0.00E+00    8.33E-02
-    3    0.00E+00    3.06E-01   -4.17E-02
-    4    0.00E+00    3.06E-01    3.75E-01   -4.17E-02
+    2    0.00E+00    3.33E-01
+    3    0.00E+00   -0.00E+00   -1.67E-01
+    4    0.00E+00   -0.00E+00    5.00E-01   -1.67E-01
     5    0.00E+00    0.00E+00    0.00E+00    0.00E+00   -0.00E+00
     6    0.00E+00    0.00E+00    0.00E+00    0.00E+00   -0.00E+00   -0.00E+00
     7    0.00E+00    0.00E+00    0.00E+00    0.00E+00   -0.00E+00   -0.00E+00   -0.00E+00
@@ -85,13 +89,13 @@
 
  All elements for this potential term are zero
 
- Time (s) in coupling:    0.00E+00
+ Time (s) in coupling:    1.00E-03
 
  The thresholds (MHz) are
-   -8.8399E+01   -5.2200E+01   -5.2200E+01   -8.0000E+00    2.8200E+01    2.8200E+01    7.2399E+01
+   -4.0016E+01   -2.9508E+01   -2.9508E+01   -9.5000E+00    1.0082E+00    1.0082E+00    2.1016E+01
  No. of R steps:       961
 
- Time (s) in R loop:    4.40E-02
+ Time (s) in R loop:    8.60E-02
 
  Adiabats written to file 'calculated_adiabats.dat'
 

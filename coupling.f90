@@ -9,6 +9,7 @@
                 ia1c, ia2c, nphc, ia1r, ia2r, nphr, &
                 n1c, mn1c, n2c, mn2c, n1r, mn1r, n2r, mn2r, &
                 iint, ia1k, ia2k, nphk, n1k, mn1k, n2k, mn2k
+        integer :: nblck, nremn, iblck, istrt
         integer :: itime_start, itime_end
         real*8  :: p1, anormc, anormr, enrc, enrr, enrk, anormk, &
                 edifc, edifr, hvvck, hvvkr, term
@@ -221,11 +222,11 @@
                     ! <1K|Hm|1R>*krondel(2K,2R)
                     if (ia2k==ia2r) then
                       term = 0d0
-                      if (mn1k-mn1r==npol) then
+                      if (abs(mn1k-mn1r)==npol) then
                         call vmfdr(n1k,mn1k,nphk,n1r,mn1r,nphr,npol,term)
                         term = term*cos(xi)
                       endif
-                      if (abs(xi)>zero.and.mn1k-mn1r==-npol) then
+                      if (abs(xi)>zero.and.abs(mn1k-mn1r)==npol) then
                         call vmfdr(n1k,mn1k,nphk,n1r,mn1r,nphr,-npol,term)
                         term = -term*sin(xi)
                       endif
@@ -236,11 +237,11 @@
                       ! <2K|Hm|1R>*krondel(1K,2R)
                       if (ia1k==ia2r) then
                         term = 0d0
-                        if (mn2k-mn1r==npol) then
+                        if (abs(mn2k-mn1r)==npol) then
                           call vmfdr(n2k,mn2k,nphk,n1r,mn1r,nphr,npol,term)
                           term = term*cos(xi)
                         endif
-                        if (abs(xi)>zero.and.mn2k-mn1r==-npol) then
+                        if (abs(xi)>zero.and.abs(mn2k-mn1r)==npol) then
                           call vmfdr(n2k,mn2k,nphk,n1r,mn1r,nphr,-npol,term)
                           term = -term*sin(xi)
                         endif
@@ -252,11 +253,11 @@
                       ! <1K|Hm|2R>*krondel(2K,1R)
                       if (ia2k==ia1r) then
                         term  = 0d0
-                        if (mn1k-mn2r==npol) then
+                        if (abs(mn1k-mn2r)==npol) then
                           call vmfdr(n1k,mn1k,nphk,n2r,mn2r,nphr,npol,term)
                           term = term*cos(xi)
                         endif
-                        if (abs(xi)>zero.and.mn1k-mn2r==-npol) then
+                        if (abs(xi)>zero.and.abs(mn1k-mn2r)==npol) then
                           call vmfdr(n1k,mn1k,nphk,n2r,mn2r,nphr,-npol,term)
                           term = -term*sin(xi)
                         endif
@@ -268,11 +269,11 @@
                       ! <2K|Hm|2R>*krondel(1K,1R)
                       if (ia1k==ia1r) then
                         term  = 0d0
-                        if (mn2k-mn2r==npol) then
+                        if (abs(mn2k-mn2r)==npol) then
                           call vmfdr(n2k,mn2k,nphk,n2r,mn2r,nphr,npol,term)
                           term = term*cos(xi)
                         endif
-                        if (abs(xi)>zero.and.mn2k-mn1r==-npol) then
+                        if (abs(xi)>zero.and.abs(mn2k-mn1r)==npol) then
                           call vmfdr(n2k,mn2k,nphk,n2r,mn2r,nphr,-npol,term)
                           term = -term*sin(xi)
                         endif
@@ -360,11 +361,11 @@
                   ! <1C|Hm|1K>*krondel(2C,2K)
                   if (ia2c==ia2k) then
                     term = 0d0
-                    if (mn1c-mn1k==npol) then
+                    if (abs(mn1c-mn1k)==npol) then
                       call vmfdr(n1c,mn1c,nphc,n1k,mn1k,nphk,npol,term)
                       term = term*cos(xi)
                     endif
-                    if (abs(xi)>zero.and.mn1c-mn1k==-npol) then
+                    if (abs(xi)>zero.and.abs(mn1c-mn1k)==npol) then
                       call vmfdr(n1c,mn1c,nphc,n1k,mn1k,nphk,-npol,term)
                       term = -term*sin(xi)
                     endif
@@ -375,11 +376,11 @@
                     ! <2C|Hm|1K>*krondel(1C,2K)
                     if (ia1c==ia2k) then
                       term = 0d0
-                      if (mn2c-mn1k==npol) then
+                      if (abs(mn2c-mn1k)==npol) then
                         call vmfdr(n2c,mn2c,nphc,n1k,mn1k,nphk,npol,term)
                         term = term*cos(xi)
                       endif
-                      if (abs(xi)>zero.and.mn2c-mn1k==-npol) then
+                      if (abs(xi)>zero.and.abs(mn2c-mn1k)==-npol) then
                         call vmfdr(n2c,mn2c,nphc,n1k,mn1k,nphk,-npol,term)
                         term = -term*sin(xi)
                       endif
@@ -391,11 +392,11 @@
                     ! <1C|Hm|2K>*krondel(2C,1K)
                     if (ia2c==ia1k) then
                       term = 0d0
-                      if (mn1c-mn2k==npol) then
+                      if (abs(mn1c-mn2k)==npol) then
                         call vmfdr(n1c,mn1c,nphc,n2k,mn2k,nphk,npol,term)
                         term = term*cos(xi)
                       endif
-                      if (abs(xi)>zero.and.mn1c-mn2k==-npol) then
+                      if (abs(xi)>zero.and.abs(mn1c-mn2k)==npol) then
                         call vmfdr(n1c,mn1c,nphc,n2k,mn2k,nphk,-npol,term)
                         term = -term*sin(xi)
                       endif
@@ -407,11 +408,11 @@
                     ! <2C|Hm|2K>*krondel(1C,1K)
                     if (ia1c==ia1k) then
                       term = 0d0
-                      if (mn2c-mn2k==npol) then
+                      if (abs(mn2c-mn2k)==npol) then
                         call vmfdr(n2c,mn2c,nphc,n2k,mn2k,nphk,npol,term)
                         term = term*cos(xi)
                       endif
-                      if (abs(xi)>zero.and.mn2c-mn1k==-npol) then
+                      if (abs(xi)>zero.and.abs(mn2c-mn1k)==npol) then
                         call vmfdr(n2c,mn2c,nphc,n2k,mn2k,nphk,-npol,term)
                         term = -term*sin(xi)
                       endif
@@ -455,6 +456,9 @@
           n2c  = iqn(ia2c,1)
           mn2c = iqn(ia2c,2)
 
+          !! BM prints:
+          !if (icol==25)print*,"icol:25 =",n1c,mn1c,n2c,mn2c,nphc
+
           do irow = 1, icol
 
             ia1r = jlevel(nqn*(irow-1)+1)+1
@@ -469,6 +473,9 @@
             mn1r = iqn(ia1r,2)
             n2r  = iqn(ia2r,1)
             mn2r = iqn(ia2r,2)
+
+            !! BM prints:
+            !if (irow==11)print*,"irow:11 =",n1r,mn1r,n2r,mn2r,nphr
 
             ! If no ellipticity then total projection of pair state 
             ! should be conserved
@@ -495,12 +502,12 @@
               ! <1C|Hm|1R>*krondel(2C,2R)
               if (ia2c==ia2r) then
                 term = 0d0
-                if (iham==mxlam+2.and.mn1c-mn1r==npol) then
+                if (iham==mxlam+2.and.abs(mn1c-mn1r)==npol) then
                   call vmfdr(n1c,mn1c,nphc,n1r,mn1r,nphr,npol,term)
                   term = term*cos(xi)
                 endif
                 if (iham==mxlam+3.and.abs(xi)>zero.and.&
-                        mn1c-mn1r==-npol) then
+                        abs(mn1c-mn1r)==npol) then
                   call vmfdr(n1c,mn1c,nphc,n1r,mn1r,nphr,-npol,term)
                   term = -term*sin(xi)
                 endif
@@ -512,17 +519,17 @@
                 ! <2C|Hm|1R>*krondel(1C,2R)
                 if (ia1c==ia2r) then
                   term = 0d0
-                  if (iham==mxlam+2.and.mn2c-mn1r==npol) then
+                  if (iham==mxlam+2.and.abs(mn2c-mn1r)==npol) then
                     call vmfdr(n2c,mn2c,nphc,n1r,mn1r,nphr,npol,term)
                     term = term*cos(xi)
                   endif
                   if (iham==mxlam+3.and.abs(xi)>zero.and.&
-                          mn2c-mn1r==-npol) then
+                          abs(mn2c-mn1r)==npol) then
                     call vmfdr(n2c,mn2c,nphc,n1r,mn1r,nphr,-npol,term)
                     term = -term*sin(xi)
                   endif
                   vl(iham,irow,icol) = vl(iham,irow,icol) &
-                          +term*anormc*anormr*2d0
+                        +term*anormc*anormr*2d0
                 endif
               endif
 
@@ -530,17 +537,17 @@
                 ! <1C|Hm|2R>*krondel(2C,1R)
                 if (ia2c==ia1r) then
                   term  = 0d0
-                  if (iham==mxlam+2.and.mn1c-mn2r==npol) then
+                  if (iham==mxlam+2.and.abs(mn1c-mn2r)==npol) then
                     call vmfdr(n1c,mn1c,nphc,n2r,mn2r,nphr,npol,term)
                     term = term*cos(xi)
                   endif
                   if (iham==mxlam+3.and.abs(xi)>zero.and.&
-                          mn1c-mn2r==-npol) then
+                          abs(mn1c-mn2r)==npol) then
                     call vmfdr(n1c,mn1c,nphc,n2r,mn2r,nphr,-npol,term)
                     term = -term*sin(xi)
                   endif
                   vl(iham,irow,icol) = vl(iham,irow,icol) &
-                          +term*anormc*anormr*2d0
+                        +term*anormc*anormr*2d0
                 endif
               endif
 
@@ -548,17 +555,17 @@
                 ! <2C|Hm|2R>*krondel(1C,1R)
                 if (ia1c==ia1r) then
                   term  = 0d0
-                  if (iham==mxlam+2.and.mn2c-mn2r==npol) then
+                  if (iham==mxlam+2.and.abs(mn2c-mn2r)==npol) then
                     call vmfdr(n2c,mn2c,nphc,n2r,mn2r,nphr,npol,term)
                     term = term*cos(xi)
                   endif
                   if (iham==mxlam+3.and.abs(xi)>zero.and.&
-                          mn2c-mn1r==-npol) then
+                          abs(mn2c-mn1r)==npol) then
                     call vmfdr(n2c,mn2c,nphc,n2r,mn2r,nphr,-npol,term)
                     term = -term*sin(xi)
                   endif
                   vl(iham,irow,icol) = vl(iham,irow,icol) &
-                          +term*anormc*anormr*2d0
+                        +term*anormc*anormr*2d0
                 endif
               endif
 
@@ -581,11 +588,27 @@
             write(6,*)"All elements for this potential term are zero"
             cycle
           endif
-          write(6,"(2x,50i12)") (icol,icol=1,npair)
-          do icol = 1, npair
-            write(6,"(i5,50es12.2)") icol, (vl(iham,irow,icol),&
+
+          nblck = npair/10
+          nremn = mod(npair,10)
+
+          do iblck = 1, nblck
+            write(6,*)
+            istrt=(iblck-1)*10
+            write(6,"(2x,10i12)") (icol,icol=istrt+1,istrt+10)
+            do icol = istrt+1, npair
+              write(6,"(i5,10es12.2)") icol, (vl(iham,irow,icol),&
+                      irow=istrt+1,min(istrt+10,icol))
+            enddo
+          enddo
+
+          if (nremn == 0) cycle
+          write(6,"(2x,9i12)") (icol,icol=10*nblck+1,npair)
+          do icol = 10*nblck+1, npair
+            write(6,"(i5,9es12.2)") icol, (vl(iham,irow,icol),&
                     irow=1,icol)
           enddo
+
         enddo
 
         call system_clock(itime_end)
