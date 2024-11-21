@@ -4,7 +4,7 @@
                            itrns, etrns, fdlt, fomg, mxlam, nvlblk, &
                            lambda, jlevel, theta, phi, xi, npol, &
                            nconst, zero, npower
-        use constants, only: MHz_to_inv_cm, fstark, pi
+        use constants, only: MHz_to_invcm, fstark, pi
         implicit none
         integer :: ia, n, mn, ii, k, ia1, ia2, nph, np, mnp, iref
         integer :: itime_start, itime_end, istep
@@ -88,10 +88,10 @@
         "xi is non-zero: cannot have z-polarization (npol=0)"
 
         ! Important prefactors (in cm-1)
-        frot = brot*MHz_to_inv_cm
+        frot = brot*MHz_to_invcm
         ffld = -eflddc*dipole*fstark  ! (kV/cm)*debye*(1/kV/debye)
-        fomg = omega*MHz_to_inv_cm
-        fdlt = delta*MHz_to_inv_cm
+        fomg = omega*MHz_to_invcm
+        fdlt = delta*MHz_to_invcm
 
         write(6,102) nmax
  102    format(/' Basis set uses monomer diatom nmax =',i3)
@@ -216,7 +216,7 @@
         if (.not. allocated(thrshvals)) allocate(thrshvals(npair))
         call thresholds(nvlblk,p,npair,elevel,thrshvals)
         write (6,'(" The thresholds (MHz) are"/,50es14.4)') &
-                thrshvals/MHz_to_inv_cm
+                thrshvals/MHz_to_invcm
 
         ! Define reference energy
         eref = 0d0
@@ -250,10 +250,10 @@
           call hammat(r,nvlblk,p,npair,elevel,wmat) 
           call dsyev('N','U',npair,wmat,npair,eval,work(:3*npair-1),&
                   3*npair-1,info)
-          write(10,'(1x,f10.2,50es14.4)') r, (eval-eref)/MHz_to_inv_cm
+          write(10,'(1x,f10.2,50es14.4)') r, (eval-eref)/MHz_to_invcm
           if (ldeng) call effective_pot(r,theta,phi,xi,omega,delta,&
                   dipole,veff)
-          if (ldeng) write(20,'(1x,f10.2,es14.4)') r,veff/MHz_to_inv_cm
+          if (ldeng) write(20,'(1x,f10.2,es14.4)') r,veff/MHz_to_invcm
           r = r+dr
           istep = istep+1
         enddo
