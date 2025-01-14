@@ -12,8 +12,9 @@
         if (iq==0) then
            c2func = 0.5d0*(3d0*cos(theta)**2-1d0)
         elseif (abs(iq)==1) then
-           c2func = -(-1d0)**iq*sqrt(3d0/2d0)*cos(theta)*sin(theta)&
-                   *cos(phi)    ! i*sin(phi) term ignored
+           c2func = -sqrt(3d0/2d0)*cos(theta)*sin(theta)*cos(phi)
+                  ! i*sin(phi) term ignored
+           if (iq==-1) c2func = -c2func
         elseif (abs(iq)==2) then
            c2func = sqrt(3d0/8d0)*sin(theta)**2*cos(2d0*phi)
            ! i*sin(2*phi) term ignored
