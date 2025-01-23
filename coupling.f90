@@ -606,7 +606,7 @@
           write(6,"(2x,9i12)") (icol,icol=10*nblck+1,npair)
           do icol = 10*nblck+1, npair
             write(6,"(i5,9es12.2)") icol, (vl(iham,irow,icol),&
-                    irow=1,icol)
+                    irow=10*nblck+1,icol)
           enddo
 
         enddo
