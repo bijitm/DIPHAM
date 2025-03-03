@@ -1,4 +1,4 @@
-21: 3:53  11/10/2024
+16:18:50   3/ 3/2025
 
  Program to calculate adiabats as a function of R and theta for dipolar scattering
  including static electric and MW fields
@@ -27,7 +27,7 @@
 
  Pair Hamiltonian basis set will be constructed using user input npair and ipair.
 
- Time (s) in pairbasis_builder:    2.00E-03
+ Time (s) in pairbasis_builder:    0.00E+00
 
   -----------------------------------------
          Pair state quantum numbers        
@@ -50,7 +50,7 @@
 
  AC electric field (kV/cm) for Rabi coupling is:  3.67E-02
 
- VCONST (cm-1) for MW coupling is  -8.37737442E-04
+ VCONST (cm-1) for MW coupling is  -8.37737443E-04
 
  Potential term  1
 
@@ -89,13 +89,13 @@
 
  All elements for this potential term are zero
 
- Time (s) in coupling:    1.00E-03
+ Time (s) in coupling:    0.00E+00
 
  The thresholds (MHz) are
    -4.0016E+01   -2.9508E+01   -2.9508E+01   -9.5000E+00    1.0082E+00    1.0082E+00    2.1016E+01
  No. of R steps:       961
 
- Time (s) in R loop:    8.60E-02
+ Time (s) in R loop:    1.50E-02
 
  Adiabats written to file 'calculated_adiabats.dat'
 
