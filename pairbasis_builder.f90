@@ -4,8 +4,8 @@
         ! Create Class-II function list to be used for Van Vleck
         ! transformations
         use dipole_module, only: nmax, nblmn, ndim, evecref, evalref, &
-                nmonbasis, lrstrct, nqn, npair, ipair, nphmx, mpair, &
-                imlst, itrns, etrns
+                nmonbasis, lrstrct, nqn, npair, ipair, nphmn, nphmx, &
+                mpair, imlst, itrns, etrns
         implicit none
         integer :: ifunc, ibl, nn, ii, jj, nsym, nph, ia1, ia2, kk, &
                 im1, im2, idx, itmp
@@ -51,7 +51,7 @@
           ifunc                = ifunc+nn
         enddo
 
-        etrns = evalref(itrns(2)+1)+evalref(itrns(1)+1)
+        etrns = evalref(itrns(2)+1)-evalref(itrns(1)+1)
 
         if (allocated(work)) deallocate(work)
         if (allocated(hmon)) deallocate(hmon)
@@ -73,6 +73,9 @@
         !    total number of required pair states. IPAIR then should
         !    contain sets of a1, a2 quantum numbers for those pair states.
 
+        ! Total number of symmetrized pairs allowed
+        nsym = (nphmx-nphmn+1)*nmonbasis*(nmonbasis+1)/2
+
         if (.not. lrstrct) then
 
           write(6,109)
@@ -80,7 +83,6 @@
      &           "using full direct product of monomer basis ",&
      &           "functions.")
 
-          nsym = (nphmx+1)*nmonbasis*(nmonbasis+1)/2
           if (allocated(ipair)) deallocate(ipair)
           allocate(ipair(nsym*nqn+1))
           ipair = -999
@@ -89,7 +91,7 @@
           jj = 0
           do ia1 = 1, nmonbasis
             do ia2 = ia1, nmonbasis
-              do nph = 0, -nphmx, -1
+              do nph = nphmn, nphmx
                 ii          = ii+1
                 ipair(jj+1) = ia1-1
                 ipair(jj+2) = ia2-1
@@ -116,13 +118,13 @@
             nph = ipair(kk+3)
             ! Assign a tag to the triples using Cantor's pairing function
             itmp = func_cantor(ia1,ia2) 
-            ipair_idx(ii) = func_cantor(itmp,-nph)
+            ipair_idx(ii) = func_cantor(itmp,nph)
             kk = kk+nqn
           enddo
 
           ! Number of functions excluded from the actual basis functions
           ! functions
-          mpair = (nphmx+1)*nmonbasis*(nmonbasis+1)/2 - npair
+          mpair = nsym-npair
           if (.not. allocated(imlst)) allocate(imlst(mpair,nqn))
           imlst = -999
 
@@ -131,9 +133,9 @@
           kk = 0
           do im1 = 1, nmonbasis
             do im2 = im1, nmonbasis
-              do nph = 0, -nphmx, -1
+              do nph = nphmn, nphmx
                 itmp = func_cantor(im1-1,im2-1)
-                idx = func_cantor(itmp,-nph)
+                idx = func_cantor(itmp,nph)
                 ! Inclusion of this function if tag is not present in
                 ! the ipair_idx array
                 if (any(ipair_idx-idx==0)) cycle

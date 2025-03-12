@@ -456,9 +456,6 @@
           n2c  = iqn(ia2c,1)
           mn2c = iqn(ia2c,2)
 
-          !! BM prints:
-          !if (icol==25)print*,"icol:25 =",n1c,mn1c,n2c,mn2c,nphc
-
           do irow = 1, icol
 
             ia1r = jlevel(nqn*(irow-1)+1)+1
@@ -473,9 +470,6 @@
             mn1r = iqn(ia1r,2)
             n2r  = iqn(ia2r,1)
             mn2r = iqn(ia2r,2)
-
-            !! BM prints:
-            !if (irow==11)print*,"irow:11 =",n1r,mn1r,n2r,mn2r,nphr
 
             ! If no ellipticity then total projection of pair state 
             ! should be conserved
