@@ -50,7 +50,9 @@ module constants
     Efld_au_to_SI = elementary_charge_in_SI/bohr_in_SI**2/(4d0*pi*epsilon_zero_in_SI), &
                     ! 5.142206751090901e11 Vm-1/au
     Efld_au_to_kVinvcm = 1d-5*Efld_au_to_SI, &  ! 5.142206751090901e6 kVcm-1/au
-    fstark = Debye_in_au*hartree_to_invcm/Efld_au_to_kVinvcm ! 0.01679200537983106 kV-1 D-1
+    fstark = Debye_in_au*hartree_to_invcm/Efld_au_to_kVinvcm, & ! 0.01679200537983106 kV-1 D-1
              ! multiply electric field (kV/cm) and dipole moment (D) with fstark to get energy in cm-1
+    xintsty_SI_to_Efld_au_sq = 8d0*pi*fine_structure_constant*autime_in_SI*bohr_in_SI**2/hartree_in_SI
+             ! 2.8494529751051543e-21 (Efld in au)^2/(W/m^2)
     
 end module constants

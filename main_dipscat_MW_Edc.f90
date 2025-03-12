@@ -41,8 +41,8 @@
      &          " which in general reads |til{n}1 mn1>|til{n}2 mn2>|N>")
 
         ! Define default values of input parameters
-        nmax  = 1      ! Molecule nmax
-        npair = 0      ! No. of restricted basis functions. 0 for full.
+        nmax   = 1      ! Molecule nmax
+        npair  = 0      ! No. of restricted basis functions. 0 for full.
         if (.not. allocated(ipair)) allocate(ipair(1000))
         ipair  = -999   ! List of pair states
         nphmx  = 0      ! Max photon quantum number
@@ -142,6 +142,15 @@
         ! Create pair basis set
         call pairbasis_builder
 
+        write(*,*)"-------------------------------"
+        write(*,*)"Efield dressed monomer energies"
+        write(*,*)"-------------------------------"
+        write(*,*)"     a       Energy (brot)     "
+        write(*,*)"-------------------------------"
+        do ia = 1, nmonbasis
+          write(*,'(i7, es18.4)')ia-1, evalref(ia)/brot/MHz_to_invcm
+        enddo
+
         ! Check IREF input parameter
         if (iref<0.or.iref>npair) stop "invalid IREF"
 
@@ -151,11 +160,12 @@
         jlevel = -999
         elevel = 0.d0
 
-        write(*,*)" -----------------------------------------"
-        write(*,*)"        Pair state quantum numbers        "
-        write(*,*)" -----------------------------------------"
-        write(*,*)"     State      a1       a2      nph      "
-        write(*,*)" -----------------------------------------"
+        write(*,*)
+        write(*,*)"-----------------------------------------"
+        write(*,*)"       Pair state quantum numbers        "
+        write(*,*)"-----------------------------------------"
+        write(*,*)"    State      a1       a2      nph      "
+        write(*,*)"-----------------------------------------"
         k = 0
         do ii = 1, npair
           ia1 = ipair(k+1)

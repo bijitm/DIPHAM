@@ -1,4 +1,4 @@
-16:18:50   3/ 3/2025
+11:34:29  12/ 3/2025
 
  Program to calculate adiabats as a function of R and theta for dipolar scattering
  including static electric and MW fields
@@ -27,13 +27,23 @@
 
  Pair Hamiltonian basis set will be constructed using user input npair and ipair.
 
- Time (s) in pairbasis_builder:    0.00E+00
+ Time (s) in pairbasis_builder:    5.90E-02
 
-  -----------------------------------------
-         Pair state quantum numbers        
-  -----------------------------------------
-      State      a1       a2      nph      
-  -----------------------------------------
+ -------------------------------
+ Efield dressed monomer energies
+ -------------------------------
+      a       Energy (brot)     
+ -------------------------------
+      0        0.0000E+00
+      1        2.0000E+00
+      2        2.0000E+00
+      3        2.0000E+00
+
+ -----------------------------------------
+        Pair state quantum numbers        
+ -----------------------------------------
+     State      a1       a2      nph      
+ -----------------------------------------
         1        0        0        0
         2        0        1       -1
         3        0        2       -1
@@ -89,13 +99,13 @@
 
  All elements for this potential term are zero
 
- Time (s) in coupling:    0.00E+00
+ Time (s) in coupling:    9.00E-03
 
  The thresholds (MHz) are
    -4.0016E+01   -2.9508E+01   -2.9508E+01   -9.5000E+00    1.0082E+00    1.0082E+00    2.1016E+01
  No. of R steps:       961
 
- Time (s) in R loop:    1.50E-02
+ Time (s) in R loop:    1.40E-02
 
  Adiabats written to file 'calculated_adiabats.dat'
 
