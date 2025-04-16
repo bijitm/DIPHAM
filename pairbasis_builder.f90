@@ -116,6 +116,9 @@
             ia1 = min(ipair(kk+1),ipair(kk+2))
             ia2 = max(ipair(kk+1),ipair(kk+2))
             nph = ipair(kk+3)
+            if (nph<nphmn .or. nph>nphmx) then
+               stop "In pair_basis_builder: nph in ipair is out of range"
+            endif
             ! Assign a tag to the triples using Cantor's pairing function
             itmp = func_cantor(ia1,ia2) 
             ipair_idx(ii) = func_cantor(itmp,nph)
