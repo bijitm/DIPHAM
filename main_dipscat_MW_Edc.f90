@@ -8,7 +8,7 @@
         implicit none
         integer :: ia, n, mn, ii, k, ia1, ia2, nph, np, mnp, iref
         integer :: itime_start, itime_end, istep
-        real*8  :: brot, dipole, omega, delta, eflddc, efldac, &
+        real*8  :: brot, dipole, omg, omega, delta, eflddc, efldac, &
                 vcoup, vconst(nconst), a(100), p(100), rmin, rmax, &
                 dr, r, veff, eref
         real*8  :: count_rate
@@ -20,9 +20,9 @@
         integer :: info
 
         namelist/params/nmax, npair, ipair, nphmn, nphmx, npol, brot, &
-                        dipole, efldac, delta, xi, theta, phi, eflddc, &
-                        mxlam, lambda, npower, a, rmin, rmax, dr, &
-                        iref, ldeng, itrns
+                        dipole, efldac, delta, omega, xi, theta, phi, &
+                        eflddc, mxlam, lambda, npower, a, rmin, rmax, &
+                        dr, iref, ldeng, itrns
 
         ! Get date and time
         call date_and_time (b(1),b(2),b(3),idate_time)
@@ -44,7 +44,8 @@
         nmax   = 1      ! Molecule nmax
         npair  = 0      ! No. of restricted basis functions. 0 for full.
         if (.not. allocated(ipair)) allocate(ipair(1000))
-        ipair  = -999   ! List of pair states
+        ipair  = -999   ! List of pair states: 3 integers for each pair state:
+                        ! a1, a2, nph, separated by commas
         nphmn  = 0      ! Min photon quantum number for the Fock state
         nphmx  = 0      ! Max photon quantum number for the Fock state
         brot   = -999d0 ! Rotational constant in MHz
@@ -53,6 +54,7 @@
         efldac = 0.d0   ! AC electric field in kV/cm for the optical field
         npol   = 0      ! Polarization: 1:RHC_x-y, 0:Li_z
         delta  = 0.d0   ! Detuning frequncy (MHz) of the optical field
+        omega  = 0.d0   ! Rabi frequncy (MHz) of the optical field
         xi     = 0.d0   ! Ellipticity (degrees) of the optical field polarization
         theta  = 0.d0   ! Interaction anisotropy (degrees)
         phi    = 0.d0   ! Interaction anisotropy (degrees)
@@ -98,9 +100,6 @@
         write(6,103) eflddc
  103    format(/' Dressed basis set will be constructed at',&
      &          ' reference dc electric field =', f8.4, ' kV/cm')
-
-        if (efldac>zero) write(6,104) efldac
- 104    format(/' AC electric field for the optical field =', f8.4, ' kV/cm')
 
         write(*,105) nmonbasis
  105    format(/' Number of monomer basis functions =',i4)
@@ -189,8 +188,8 @@
      &       i2," R-dependent term(s) and ",i2," asymptotic term(s).")
 
         ! Calculate Rabi frequency for the optical field
-        omega = 0d0
-        if (efldac>zero) then
+        omg = 0d0
+        if (efldac>zero .or. omega>zero) then
           ! First calculate angular part
           write(6,48) itrns(1), itrns(2)
   48      format(/" Optical transition from states a_i =",i4," to a_f =",i4)
@@ -202,11 +201,19 @@
           mnp = iqn(itrns(2)+1,2)
           call vmfdr(n,mn,0,np,mnp,-1,npol,vcoup)
           if (abs(vcoup)<zero) stop "No Rabi coupling. Check ITRNS array and/or NPOL"
-          omega = abs(efldac*dipole*fstark*vcoup)/MHz_to_invcm ! in MHz
+
+          if (efldac>zero) omg = abs(efldac*dipole*fstark*vcoup)/MHz_to_invcm ! in MHz
+          if (efldac>zero .and. omega>zero .and. abs(omega-omg)/omg>1d-2) then
+            stop " Incompatible 'omega' for 'efldac'"
+          endif
+          if (omega>zero) efldac = abs(omega*MHz_to_invcm/dipole/fstark/vcoup)  ! in kV/cm
+          omega = max(omg,omega)
           write(6,50) omega
   50      format(/" Rabi frequency for the transition is:", es10.2, " MHz")
           write(6,555) delta
  555      format(/" Detuning frequency for the transition is:", es10.2, " MHz")
+          write(6,540) efldac*1d3
+ 540      format(/' AC electric field for the optical field =', es10.2, ' V/cm')
           write(6,505) (etrns+fdlt)/MHz_to_invcm ! in MHz
  505      format(/" Optical field frequency for the transition is:", es10.2, " MHz")
         endif
@@ -247,14 +254,14 @@
         call system_clock(itime_start,count_rate)
 
         open (10,file="calculated_adiabats.dat",status="unknown")
-        write(10,('("# Adiabats:",/"# R (bohr)  Energies (MHz)",/ &
-     &              "#-------------------------")'))
+!       write(10,('("# Adiabats:",/"# R (bohr)  Energies (MHz)",/ &
+!    &              "#-------------------------")'))
         
         if (ldeng) then
         ! Writes Deng et al effective potential
           open (20,file="Deng_et_al_veff.dat",status="unknown")
-          write(20,('("# V_effective:",/"# R (bohr)  Energy (MHz)",/ &
-     &                "#-------------------------")'))
+!         write(20,('("# V_effective:",/"# R (bohr)  Energy (MHz)",/ &
+!    &                "#-------------------------")'))
         endif
 
         r = rmin
@@ -264,10 +271,11 @@
           call hammat(r,nvlblk,p,npair,elevel,wmat) 
           call dsyev('N','U',npair,wmat,npair,eval,work(:3*npair-1),&
                   3*npair-1,info)
-          write(10,'(1x,f10.2,50es14.4)') r, (eval-eref)/MHz_to_invcm
+          write(10,'(1x,f10.2, f14.6,50es14.4)') r, theta, &
+                  (eval-eref)/MHz_to_invcm
           if (ldeng) call effective_pot(r,theta,phi,xi,omega,delta,&
                   dipole,veff)
-          if (ldeng) write(20,'(1x,f10.2,es14.4)') r,veff/MHz_to_invcm
+          if (ldeng) write(20,'(1x,f10.2, f14.6, es14.4)') r,theta,veff/MHz_to_invcm
           r = r+dr
           istep = istep+1
         enddo

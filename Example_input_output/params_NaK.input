@@ -1,7 +1,8 @@
 &params
 ! All NaK parameters
 nmax   = 1,
-nphmx  = 2,
+nphmn  =-2,
+nphmx  = 0,
 itrns  = 0,3,         ! ITRNS array defines the two monomer dressed states for the MW transition
 npair  = 7,
 ipair  = 0,0, 0,
