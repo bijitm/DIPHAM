@@ -254,14 +254,14 @@
         call system_clock(itime_start,count_rate)
 
         open (10,file="calculated_adiabats.dat",status="unknown")
-!       write(10,('("# Adiabats:",/"# R (bohr)  Energies (MHz)",/ &
-!    &              "#-------------------------")'))
+        write(10,('("# Adiabats:",/"# R (bohr)  theta (rad) Energies (MHz)",/ &
+     &              "#-------------------------")'))
         
         if (ldeng) then
         ! Writes Deng et al effective potential
           open (20,file="Deng_et_al_veff.dat",status="unknown")
-!         write(20,('("# V_effective:",/"# R (bohr)  Energy (MHz)",/ &
-!    &                "#-------------------------")'))
+          write(20,('("# V_effective:",/"# R (bohr)  theta (rad) Energy (MHz)",/ &
+     &                "#-------------------------")'))
         endif
 
         r = rmin
