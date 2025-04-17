@@ -1,0 +1,19 @@
+&params
+! CaF Fixed theta adiabats
+nmax   = 5,
+npair  = 2,
+ipair  = 1,1,0,
+         0,2,0,
+brot   = 10267.46D0, ! MHz
+dipole = 3.07D0,     ! debye
+theta  = 0.0,        ! in degrees
+rmin   = 50.0,       ! in bohr
+rmax   = 20000.0,
+dr     = 1.0,
+eflddc = 21.6, ! in kV/cm
+mxlam  = 2,
+lambda = 1,1,2, 1,1,-1,
+npower = -3, -6,
+a      = 320181.7836947094D0, 102516374609.92569D0,
+iref   = 2,
+/
