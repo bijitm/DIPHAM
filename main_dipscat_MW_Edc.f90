@@ -8,7 +8,7 @@
         implicit none
         integer :: ia, n, mn, ii, k, ia1, ia2, nph, np, mnp, iref
         integer :: itime_start, itime_end, istep
-        real*8  :: brot, dipole, omg, omega, delta, eflddc, efldac, &
+        real*8  :: brot, dipole, omega, delta, eflddc, efldac, &
                 vcoup, vconst(nconst), a(100), p(100), rmin, rmax, &
                 dr, r, veff, eref
         real*8  :: count_rate
@@ -187,8 +187,7 @@
  345    format(/" Potential terms will be constructed from ",&
      &       i2," R-dependent term(s) and ",i2," asymptotic term(s).")
 
-        ! Calculate Rabi frequency for the optical field
-        omg = 0d0
+        ! If MW field is on
         if (efldac>zero .or. omega>zero) then
           ! First calculate angular part
           write(6,48) itrns(1), itrns(2)
@@ -202,12 +201,13 @@
           call vmfdr(n,mn,0,np,mnp,-1,npol,vcoup)
           if (abs(vcoup)<zero) stop "No Rabi coupling. Check ITRNS array and/or NPOL"
 
-          if (efldac>zero) omg = abs(efldac*dipole*fstark*vcoup)/MHz_to_invcm ! in MHz
-          if (efldac>zero .and. omega>zero .and. abs(omega-omg)/omg>1d-2) then
-            stop " Incompatible 'omega' for 'efldac'"
+          if (efldac>zero) then
+            write(6,*)
+            write(6,*)"Since EFLDAC is provided, OMEGA will be calculated based on it."
+            omega = abs(efldac*dipole*fstark*vcoup)/MHz_to_invcm ! in MHz
           endif
-          if (omega>zero) efldac = abs(omega*MHz_to_invcm/dipole/fstark/vcoup)  ! in kV/cm
-          omega = max(omg,omega)
+          if (efldac<zero .and. omega>zero) &
+                  efldac = abs(omega*MHz_to_invcm/dipole/fstark/vcoup)  ! in kV/cm
           write(6,50) omega
   50      format(/" Rabi frequency for the transition is:", es10.2, " MHz")
           write(6,555) delta
