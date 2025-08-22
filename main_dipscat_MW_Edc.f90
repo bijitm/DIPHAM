@@ -51,15 +51,15 @@
         brot   = -999d0 ! Rotational constant in MHz
         dipole = -999d0 ! Dipole moment in debye
         eflddc = 0.d0   ! DC electric field in kV/cm
-        efldac = 0.d0   ! AC electric field in kV/cm for the optical field
+        efldac = 0.d0   ! AC electric field in kV/cm for the MW field
         npol   = 0      ! Polarization: 1:RHC_x-y, 0:Li_z
-        delta  = 0.d0   ! Detuning frequncy (MHz) of the optical field
-        omega  = 0.d0   ! Rabi frequncy (MHz) of the optical field
-        xi     = 0.d0   ! Ellipticity (degrees) of the optical field polarization
+        delta  = 0.d0   ! Detuning frequncy (MHz) of the MW field
+        omega  = 0.d0   ! Rabi frequncy (MHz) of the MW field
+        xi     = 0.d0   ! Ellipticity (degrees) of the MW field polarization
         theta  = 0.d0   ! Interaction anisotropy (degrees)
         phi    = 0.d0   ! Interaction anisotropy (degrees)
         itrns  = -999   ! ITRNS(2) array takes two integer elements that define
-                        ! the two monomer dressed states for the optical field transition
+                        ! the two monomer dressed states for the MW transition
         mxlam  = 1      ! Number of R-dependent potential terms
         if (.not. allocated(lambda)) allocate(lambda(1000))
         lambda = -999   ! Groups of three indices to describe diatom-diatom
@@ -191,7 +191,7 @@
         if (efldac>zero .or. omega>zero) then
           ! First calculate angular part
           write(6,48) itrns(1), itrns(2)
-  48      format(/" Optical transition from states a_i =",i4," to a_f =",i4)
+  48      format(/" MW transition from states a_i =",i4," to a_f =",i4)
           write(6,49) xi*180d0/pi
   49      format(/" Ellipticity xi in polarization (degrees) =",f6.1)
           n   = iqn(itrns(1)+1,1)
@@ -213,16 +213,16 @@
           write(6,555) delta
  555      format(/" Detuning frequency for the transition is:", es10.2, " MHz")
           write(6,540) efldac*1d3
- 540      format(/' AC electric field for the optical field =', es10.2, ' V/cm')
+ 540      format(/' AC electric field for the MW field =', es10.2, ' V/cm')
           write(6,505) (etrns+fdlt)/MHz_to_invcm ! in MHz
- 505      format(/" Optical field frequency for the transition is:", es10.2, " MHz")
+ 505      format(/" MW field frequency for the transition is:", es10.2, " MHz")
         endif
 
         ! define vconst array in cm-1
         vconst(1)   = 1d0
         vconst(2:3) = -efldac*dipole*fstark/2d0  ! (kV/cm)*debye*(1/kV/debye)
 
-        write(6,'(/" VCONST (cm-1) for optical field is ",es16.8)') &
+        write(6,'(/" VCONST (cm-1) for MW field is ",es16.8)') &
                 vconst(2)
 
         ! Create coupling matrix elements
