@@ -19,6 +19,9 @@
         character*10 :: b(3)
         integer :: info
 
+        ! functions
+        real*8 :: c1func
+
         namelist/params/nmax, npair, ipair, nphmn, nphmx, npol, brot, &
                         dipole, efldac, delta, omega, xi, theta, phi, &
                         eflddc, mxlam, lambda, npower, a, rmin, rmax, &
@@ -145,6 +148,41 @@
         ! Calculates the dc-field dressed energies (eigenvalues) and eigenvectors
         call pairbasis_builder
 
+        ! If MW field is on
+        if (efldac>zero .or. omega>zero) then
+          ! First calculate angular part
+          write(6,48) itrns(1), itrns(2)
+  48      format(" MW transition from states a_i =",i4," to a_f =",i4)
+          if(npol==1) write(6,'(/" Right-hand circularly polarized")')
+          if(npol==0) write(6,'(/" Linear polarization along z" )')
+          write(6,49) xi*180d0/pi
+  49      format(/" Ellipticity xi in polarization (degrees) =",f6.1)
+          n   = iqn(itrns(1)+1,1)
+          mn  = iqn(itrns(1)+1,2)
+          np  = iqn(itrns(2)+1,1)
+          mnp = iqn(itrns(2)+1,2)
+          !call vmfdr(n,mn,0,np,mnp,-1,npol,vcoup)
+          vcoup = c1func(n,mn,np,mnp,-npol)
+          etrns = abs(dble(np*(np+1)-n*(n+1)))*frot
+          if (abs(vcoup)<zero) stop "No Rabi coupling. Check ITRNS array and/or NPOL"
+
+          if (efldac>zero) then
+            write(6,*)
+            write(6,*)"Since EFLDAC is provided, OMEGA will be calculated based on it."
+            omega = abs(efldac*dipole*fstark*vcoup)/MHz_to_invcm ! in MHz
+          endif
+          if (efldac<zero .and. omega>zero) &
+                  efldac = abs(omega*MHz_to_invcm/dipole/fstark/vcoup)  ! in kV/cm
+          write(6,50) omega
+  50      format(/" Rabi frequency for the transition is:", es10.2, " MHz")
+          write(6,555) delta
+ 555      format(/" Detuning frequency for the transition is:", es10.2, " MHz")
+          write(6,540) efldac*1d3
+ 540      format(/' AC electric field for the MW field =', es10.2, ' V/cm')
+          write(6,505) (etrns+fdlt)/MHz_to_invcm ! in MHz
+ 505      format(/" MW field frequency for the transition is:", es10.2, " MHz")
+        endif
+
         write(*,*)"-------------------------------"
         write(*,*)"Efield dressed monomer energies"
         write(*,*)"-------------------------------"
@@ -186,37 +224,6 @@
         write(*,345) mxlam, nconst
  345    format(/" Potential terms will be constructed from ",&
      &       i2," R-dependent term(s) and ",i2," asymptotic term(s).")
-
-        ! If MW field is on
-        if (efldac>zero .or. omega>zero) then
-          ! First calculate angular part
-          write(6,48) itrns(1), itrns(2)
-  48      format(/" MW transition from states a_i =",i4," to a_f =",i4)
-          write(6,49) xi*180d0/pi
-  49      format(/" Ellipticity xi in polarization (degrees) =",f6.1)
-          n   = iqn(itrns(1)+1,1)
-          mn  = iqn(itrns(1)+1,2)
-          np  = iqn(itrns(2)+1,1)
-          mnp = iqn(itrns(2)+1,2)
-          call vmfdr(n,mn,0,np,mnp,-1,npol,vcoup)
-          if (abs(vcoup)<zero) stop "No Rabi coupling. Check ITRNS array and/or NPOL"
-
-          if (efldac>zero) then
-            write(6,*)
-            write(6,*)"Since EFLDAC is provided, OMEGA will be calculated based on it."
-            omega = abs(efldac*dipole*fstark*vcoup)/MHz_to_invcm ! in MHz
-          endif
-          if (efldac<zero .and. omega>zero) &
-                  efldac = abs(omega*MHz_to_invcm/dipole/fstark/vcoup)  ! in kV/cm
-          write(6,50) omega
-  50      format(/" Rabi frequency for the transition is:", es10.2, " MHz")
-          write(6,555) delta
- 555      format(/" Detuning frequency for the transition is:", es10.2, " MHz")
-          write(6,540) efldac*1d3
- 540      format(/' AC electric field for the MW field =', es10.2, ' V/cm')
-          write(6,505) (etrns+fdlt)/MHz_to_invcm ! in MHz
- 505      format(/" MW field frequency for the transition is:", es10.2, " MHz")
-        endif
 
         ! define vconst array in cm-1
         vconst(1)   = 1d0
@@ -271,7 +278,7 @@
           call hammat(r,nvlblk,p,npair,elevel,wmat) 
           call dsyev('N','U',npair,wmat,npair,eval,work(:3*npair-1),&
                   3*npair-1,info)
-          write(10,'(1x,f10.2, f14.6,50es14.4)') r, theta, &
+          write(10,'(1x,f10.2, f18.10,50es14.4)') r, theta, &
                   (eval-eref)/MHz_to_invcm
           if (ldeng) call effective_pot(r,theta,phi,xi,omega,delta,&
                   dipole,veff)
