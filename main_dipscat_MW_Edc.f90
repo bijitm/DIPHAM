@@ -10,11 +10,11 @@
         integer :: itime_start, itime_end, istep
         real*8  :: brot, dipole, omega, delta, eflddc, efldac, &
                 vcoup, vconst(nconst), a(100), p(100), rmin, rmax, &
-                dr, r, veff, eref
+                dr, r, veff, eref, omega_pi, delta_pi
         real*8  :: count_rate
         real*8, allocatable :: elevel(:), thrshvals(:), wmat(:,:), &
                 eval(:), work(:)
-        logical :: ldeng
+        logical :: leffMW, leffdual
         integer :: idate_time(8)
         character*10 :: b(3)
         integer :: info
@@ -25,7 +25,8 @@
         namelist/params/nmax, npair, ipair, nphmn, nphmx, npol, brot, &
                         dipole, efldac, delta, omega, xi, theta, phi, &
                         eflddc, mxlam, lambda, npower, a, rmin, rmax, &
-                        dr, iref, ldeng, itrns
+                        dr, iref, leffMW, leffdual, itrns, omega_pi, &
+                        delta_pi
 
         ! Get date and time
         call date_and_time (b(1),b(2),b(3),idate_time)
@@ -44,39 +45,44 @@
      &          " which in general reads |til{n}1 mn1>|til{n}2 mn2>|N>")
 
         ! Define default values of input parameters
-        nmax   = 1      ! Molecule nmax
-        npair  = 0      ! No. of restricted basis functions. 0 for full.
+        nmax     = 1      ! Molecule nmax
+        npair    = 0      ! No. of restricted basis functions. 0 for full.
         if (.not. allocated(ipair)) allocate(ipair(1000))
-        ipair  = -999   ! List of pair states: 3 integers for each pair state:
-                        ! a1, a2, nph, separated by commas
-        nphmn  = 0      ! Min photon quantum number for the Fock state
-        nphmx  = 0      ! Max photon quantum number for the Fock state
-        brot   = -999d0 ! Rotational constant in MHz
-        dipole = -999d0 ! Dipole moment in debye
-        eflddc = 0.d0   ! DC electric field in kV/cm
-        efldac = 0.d0   ! AC electric field in kV/cm for the MW field
-        npol   = 0      ! Polarization: 1:RHC_x-y, 0:Li_z
-        delta  = 0.d0   ! Detuning frequncy (MHz) of the MW field
-        omega  = 0.d0   ! Rabi frequncy (MHz) of the MW field
-        xi     = 0.d0   ! Ellipticity (degrees) of the MW field polarization
-        theta  = 0.d0   ! Interaction anisotropy (degrees)
-        phi    = 0.d0   ! Interaction anisotropy (degrees)
-        itrns  = -999   ! ITRNS(2) array takes two integer elements that define
-                        ! the two monomer dressed states for the MW transition
-        mxlam  = 1      ! Number of R-dependent potential terms
+        ipair    = -999   ! List of pair states: 3 integers for each pair state:
+                          ! a1, a2, nph, separated by commas
+        nphmn    = 0      ! Min photon quantum number for the Fock state
+        nphmx    = 0      ! Max photon quantum number for the Fock state
+        brot     = -999d0 ! Rotational constant in MHz
+        dipole   = -999d0 ! Dipole moment in debye
+        eflddc   = 0.d0   ! DC electric field in kV/cm
+        efldac   = 0.d0   ! AC electric field in kV/cm for the MW field
+        npol     = 0      ! Polarization: 1:RHC_x-y, 0:Li_z
+        delta    = 0.d0   ! Detuning frequncy (MHz) of the MW field
+        omega    = 0.d0   ! Rabi frequncy (MHz) of the MW field
+        delta_pi = 0.d0   ! Detuning frequncy (MHz) of the 2nd linear z MW field
+        omega_pi = 0.d0   ! Rabi frequncy (MHz) of the 2nd linear z MW field
+        xi       = 0.d0   ! Ellipticity (degrees) of the MW field polarization
+        theta    = 0.d0   ! Interaction anisotropy (degrees)
+        phi      = 0.d0   ! Interaction anisotropy (degrees)
+        itrns    = -999   ! ITRNS(2) array takes two integer elements that define
+                          ! the two monomer dressed states for the MW transition
+        mxlam    = 1      ! Number of R-dependent potential terms
         if (.not. allocated(lambda)) allocate(lambda(1000))
-        lambda = -999   ! Groups of three indices to describe diatom-diatom
-                        ! potential terms
-        npower = 0      ! Array of mxlam elements: R^{npower} describes the 
-                        ! potential scaling 
-        a      = 0d0    ! Array of mxlam elements: Coefficient of the potential
-                        ! term in cm-1
-        rmin   = 50d0   ! all r in bohr
-        rmax   = 1000d0
-        dr     = 5d0    
-        iref   = 0      ! Reference pair state which will be 0 in
-                        ! energy, if zero then no reference level
-        ldeng  = .false.! Logical flag for writing Deng et al potential
+        lambda   = -999   ! Groups of three indices to describe diatom-diatom
+                          ! potential terms
+        npower   = 0      ! Array of mxlam elements: R^{npower} describes the 
+                          ! potential scaling 
+        a        = 0d0    ! Array of mxlam elements: Coefficient of the potential
+                          ! term in cm-1
+        rmin     = 50d0   ! all r in bohr
+        rmax     = 1000d0
+        dr       = 5d0    
+        iref     = 0      ! Reference pair state which will be 0 in
+                          ! energy, if zero then no reference level
+        leffMW   = .false.! Logical flag for writing Deng et al potential for
+                          ! single MW
+        leffdual = .false.! Logical flag for writing Deng et al potential for
+                          ! double MW
 
         read(5,params)
         nmonbasis = (nmax+1)**2
@@ -264,10 +270,17 @@
         write(10,('("# Adiabats:",/"# R (bohr)  theta (rad) Energies (MHz)",/ &
      &              "#-------------------------")'))
         
-        if (ldeng) then
+        if (leffMW) then
         ! Writes Deng et al effective potential
           open (20,file="Deng_et_al_veff.dat",status="unknown")
           write(20,('("# V_effective:",/"# R (bohr)  theta (rad) Energy (MHz)",/ &
+     &                "#-------------------------")'))
+        endif
+
+        if (leffdual) then
+        ! Writes Deng et al effective potential
+          open (21,file="Deng_et_al_veff_dualMW.dat",status="unknown")
+          write(21,('("# V_effective:",/"# R (bohr)  theta (rad) Energy (MHz)",/ &
      &                "#-------------------------")'))
         endif
 
@@ -280,9 +293,12 @@
                   3*npair-1,info)
           write(10,'(1x,f10.2, f18.10,50es14.4)') r, theta, &
                   (eval-eref)/MHz_to_invcm
-          if (ldeng) call effective_pot(r,theta,phi,xi,omega,delta,&
+          if (leffMW) call microwave_eff_pot(r,theta,phi,xi,omega,delta,&
                   dipole,veff)
-          if (ldeng) write(20,'(1x,f10.2, f14.6, es14.4)') r,theta,veff/MHz_to_invcm
+          if (leffMW) write(20,'(1x,f10.2, f14.6, es14.4)') r,theta,veff/MHz_to_invcm
+          if (leffdual) call dual_MW_eff_pot(r,theta,omega,delta,omega_pi,delta_pi, &
+                  dipole,veff)
+          if (leffdual) write(21,'(1x,f10.2, f14.6, es14.4)') r,theta,veff/MHz_to_invcm
           r = r+dr
           istep = istep+1
         enddo
@@ -294,8 +310,10 @@
                 dble(itime_end-itime_start)/count_rate
 
         write(6,*)"Adiabats written to file 'calculated_adiabats.dat'"
-        if (ldeng) write(6,*)"Deng et al. effective potential written", &
+        if (leffMW) write(6,*)"Deng et al. effective potential written", &
      &          " in file 'Deng_et_al_veff.dat'"
+        if (leffdual) write(6,*)"Deng et al. effective potential for dual MW written", &
+     &          " in file 'Deng_et_al_veff_dualMW.dat'"
 
         write(6,'(/" Program run successfully")')
 

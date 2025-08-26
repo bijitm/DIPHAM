@@ -1,4 +1,4 @@
-      subroutine effective_pot (r,theta,phi,xi,omega,delta,dipole,veff)
+      subroutine microwave_eff_pot (r,theta,phi,xi,omega,delta,dipole,veff)
         ! This is effective potential proposed by Deng et al in
         ! PRL 130, 183001 (2023)
         use constants, only: Debye_in_au, hartree_to_invcm, &
@@ -22,5 +22,5 @@
                 cos(theta)**2)
         veff = c3*c3ang/r**3 + c6*c6ang/r**6
         return
-      end subroutine effective_pot
+      end subroutine microwave_eff_pot
 
