@@ -19,6 +19,7 @@
         integer                    :: info
 
         ! potential params
+        real*8 :: delta_sg, delta_pi
         real*8 :: epls, emis, emi1, ezro, omga
         real*8 :: alph, beta, gamm
         real*8 :: sinalph, cosalph, cos2alph, cos3alph
@@ -36,32 +37,50 @@
         real*8 :: sintheta, costheta, sinthesq, costhesq, sinthet4
         real*8 :: r3, rinv3, rinv6
 
+!       ! debugging
+!       integer :: ii, jj
+
+        ! Note different convention for sign of delta in Karman et al vs Deng et al
+        ! Following Karman et al's convention
+        delta_sg = -del_sg
+        delta_pi = -del_pi
+
         ! Eq A1
         hmat = 0d0
         hmat(1,2) = omg_sg/2d0
         hmat(2,1) = hmat(1,2)
         hmat(1,3) = omg_pi/2d0
         hmat(3,1) = hmat(1,3)
-        hmat(2,2) = del_sg
-        hmat(3,3) = del_pi
-        hmat(4,4) = del_sg
+        hmat(2,2) = delta_sg
+        hmat(3,3) = delta_pi
+        hmat(4,4) = delta_sg
 
         evec = hmat
         call dsyev('V','U',nst,evec,nst,eval,work,3*nst-1,info)
+
+!       ! debugging
+!       do ii=1,4
+!       write(97,'(4es18.6)') (evec(ii,jj),jj=1,nst)
+!       enddo
+!       write(97,*)
+!       write(97,'(4es18.6)') eval
 
         ! Eq A2 but columns reordered in ascending order of energy
         ! Columns 1,2,3,4 (in paper) -> 4,3,2,1 (dsyev output)
         alph = acos(evec(1,4))
         if (abs(alph)<1d-16) stop 'dual_MW_eff_pot: alpha is zero'
         sinalph = sin(alph)
-        beta = acos(evec(3,4)/sinalph)
+        beta = acos(evec(2,4)/sinalph)
         gamm = acos(-evec(1,2)/sinalph)
 
         epls = eval(4)
         emi1 = eval(3)
         emis = eval(2)
         ezro = eval(1)
-        omga = del_pi-del_sg
+        omga = delta_pi-delta_sg
+
+!       ! debugging
+!       write(98,*)omg_pi,epls,emi1,emis,ezro
 
         cosalph  = cos(alph)
         sinalpsq = sinalph**2
@@ -151,7 +170,7 @@
         term11 = sinalph4*cosalpsq*sinbetsq*term11**2 & 
                / (2d0*epls-ezro-emis-omga)
                
-        term12 = cos2alph*sinbeta*singamm-cosalph*cosbeta*singamm
+        term12 = cos2alph*sinbeta*singamm-cosalph*cosbeta*cosgamm
         term12 = sinalpsq*cosalpsq*cosbetsq*term12**2 & 
                / (epls-ezro+omga)
 
@@ -180,6 +199,13 @@
 
         ! Below Eq (23)
         C6 = 15d0*eta**2*w2/32d0/pi                               ! MHz bohr^6
+
+!       ! debugging
+!       term1 = (dipole*Debye_in_au)**2/12d0/(1d0+(del_sg/omg_sg)**2)
+!       term1 = term1*hartree_to_invcm/MHz_to_invcm
+!       term2 = ((dipole*Debye_in_au)**2*hartree_to_invcm/MHz_to_invcm)**2/omg_sg/8d0
+!       term2 = term2/sqrt((1d0+(del_sg/omg_sg)**2)**3)
+!       write(99,*)omg_pi,w0,w1,w2,C3,term1,C6,term2
 
         sintheta = sin(theta)
         costheta = cos(theta)
