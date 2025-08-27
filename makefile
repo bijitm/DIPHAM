@@ -1,4 +1,5 @@
 # A simple makefile to compile the code
+main = main_test_debugg.f90
 main = main_dipscat_MW_Edc.f90
 modules = dipole_module.f90 constants_module.f90
 subroutines = monomer_mapping.f90 pairbasis_builder.f90 coupling.f90 \

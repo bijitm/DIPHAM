@@ -205,7 +205,7 @@
 !       term1 = term1*hartree_to_invcm/MHz_to_invcm
 !       term2 = ((dipole*Debye_in_au)**2*hartree_to_invcm/MHz_to_invcm)**2/omg_sg/8d0
 !       term2 = term2/sqrt((1d0+(del_sg/omg_sg)**2)**3)
-!       write(99,*)omg_pi,w0,w1,w2,C3,term1,C6,term2
+!       write(99,*)omg_sg,del_sg,omg_pi,del_pi,C3
 
         sintheta = sin(theta)
         costheta = cos(theta)
