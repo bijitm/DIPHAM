@@ -167,9 +167,9 @@
           mn  = iqn(itrns(1)+1,2)
           np  = iqn(itrns(2)+1,1)
           mnp = iqn(itrns(2)+1,2)
-          !call vmfdr(n,mn,0,np,mnp,-1,npol,vcoup)
-          vcoup = c1func(n,mn,np,mnp,-npol)
-          etrns = abs(dble(np*(np+1)-n*(n+1)))*frot
+          call vmfdr(n,mn,0,np,mnp,-1,npol,vcoup)
+          !vcoup = c1func(n,mn,np,mnp,-npol)
+          !etrns = abs(dble(np*(np+1)-n*(n+1)))*frot
           if (abs(vcoup)<zero) stop "No Rabi coupling. Check ITRNS array and/or NPOL"
 
           if (efldac>zero) then
@@ -185,8 +185,8 @@
  555      format(/" Detuning frequency for the transition is:", es10.2, " MHz")
           write(6,540) efldac*1d3
  540      format(/' AC electric field for the MW field =', es10.2, ' V/cm')
-          write(6,505) (etrns+fdlt)/MHz_to_invcm ! in MHz
- 505      format(/" MW field frequency for the transition is:", es10.2, " MHz")
+          write(6,505) (etrns+fdlt)/brot/MHz_to_invcm ! in units of brot
+ 505      format(/" MW field frequency for the transition is:", f12.4, " x brot")
         endif
 
         write(*,*)"-------------------------------"
