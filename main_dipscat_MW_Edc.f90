@@ -96,7 +96,6 @@
         if (xi<0d0.or.xi>45d0) stop "xi must be between 0 and 45."
         if (abs(xi)>zero.and.npol==0) stop &
         "xi is non-zero: cannot have z-polarization (npol=0)"
-        if (iref<0.or.iref>npair) stop "invalid IREF"
         if (npair>0.and.any(ipair(:npair*nqn)==-999)) &
      &    stop "incompatible inputs for npair and ipair"
         if (nphmx<nphmn) stop "nphmx < nphmn"
@@ -252,6 +251,7 @@
         write (6,'(" The thresholds (MHz) are"/,50es14.4)') &
                 thrshvals/MHz_to_invcm
 
+        if (iref<0.or.iref>npair) stop "invalid IREF"
         ! Define reference energy
         eref = 0d0
         if (iref/=0) eref = thrshvals(iref)
