@@ -90,9 +90,7 @@
         ! Sanity checks on a few input params
         if (brot<0d0) stop "Rotational constant not supplied"
         if (dipole<0d0) stop "Dipole moment not supplied"
-        if (.not.(npol==0.or.npol==1)) stop &
-          " STOP: Incorrect npol param, only allowed values"// &
-          " are 0 (Linear z) or 1 (RHC x-y plane)"
+        if (.not.(npol==0.or.abs(npol)==1)) stop " Incorrect npol"
         if (xi<0d0.or.xi>45d0) stop "xi must be between 0 and 45."
         if (abs(xi)>zero.and.npol==0) stop &
         "xi is non-zero: cannot have z-polarization (npol=0)"
