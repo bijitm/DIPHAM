@@ -52,7 +52,7 @@
         enddo
 
         etrns = 0d0
-        if (.not. any(itrns==-999)) etrns = evalref(itrns(2)+1)-evalref(itrns(1)+1)
+        if (.not. any(itrns==-999)) etrns = abs(evalref(itrns(2)+1)-evalref(itrns(1)+1))
 
         if (allocated(work)) deallocate(work)
         if (allocated(hmon)) deallocate(hmon)

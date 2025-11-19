@@ -166,7 +166,8 @@
           mn  = iqn(itrns(1)+1,2)
           np  = iqn(itrns(2)+1,1)
           mnp = iqn(itrns(2)+1,2)
-          call vmfdr(n,mn,0,np,mnp,-1,npol,vcoup)
+          if (npol==0) call vmfdr(n,mn,0,np,mnp,-1,0,vcoup)
+          if (npol/=0) call vmfdr(n,mn,0,np,mnp,(mn-mnp)/npol,npol,vcoup)
           if (abs(vcoup)<zero) stop "No Rabi coupling. Check ITRNS array and/or NPOL"
           write(6,53) vcoup
   53      format(/" MW transition dipole moment (in units of mu):", es10.2)
