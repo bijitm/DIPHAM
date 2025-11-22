@@ -230,8 +230,8 @@
      &       i2," R-dependent term(s) and ",i2," asymptotic term(s).")
 
         ! define vconst array in cm-1
-        vconst(1)   = 1d0
-        vconst(2:3) = -efldac*dipole*fstark/2d0  ! (kV/cm)*debye*(1/kV/debye)
+        vconst(1) = 1d0
+        vconst(2) = -efldac*dipole*fstark/2d0  ! (kV/cm)*debye*(1/kV/debye)
 
         write(6,'(/" VCONST (cm-1) for MW field is ",es16.8)') &
                 vconst(2)

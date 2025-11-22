@@ -1,9 +1,8 @@
       module dipole_module
          implicit none
-         integer, parameter :: nqn = 3, nconst = 3
+         integer, parameter :: nqn = 3, nconst = 2
          ! NCONST: 1. Diagonal Stark+Rot+MW detuning;
-         ! NCONST: 2. MW Rabi coupling for 0/+1 sigma
-         ! NCONST: 3. MW Rabi coupling for -1 sigma (for xi>0)
+         ! NCONST: 2. MW Rabi coupling
          real*8,  parameter :: zero = 1d-12
          integer :: nmax, npair, nmonbasis, nblmn, nphmn, nphmx, &
                     mpair, itrns(2), mxlam, nvlblk, npol, npower(100)

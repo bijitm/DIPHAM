@@ -222,11 +222,11 @@
                     ! <1K|Hm|1R>*krondel(2K,2R)
                     if (ia2k==ia2r) then
                       term = 0d0
-                      if (abs(mn1k-mn1r)==abs(npol)) then
+                      if (mn1k-mn1r+npol*(nphk-nphr)==0) then
                         call vmfdr(n1k,mn1k,nphk,n1r,mn1r,nphr,npol,term)
                         term = term*cos(xi)
                       endif
-                      if (abs(xi)>zero.and.abs(mn1k-mn1r)==abs(npol)) then
+                      if (abs(xi)>zero.and.abs(mn1k-mn1r+npol*(nphk-nphr))==2) then
                         call vmfdr(n1k,mn1k,nphk,n1r,mn1r,nphr,-npol,term)
                         term = -term*sin(xi)
                       endif
@@ -237,11 +237,11 @@
                       ! <2K|Hm|1R>*krondel(1K,2R)
                       if (ia1k==ia2r) then
                         term = 0d0
-                        if (abs(mn2k-mn1r)==abs(npol)) then
+                        if (mn2k-mn1r+npol*(nphk-nphr)==0) then
                           call vmfdr(n2k,mn2k,nphk,n1r,mn1r,nphr,npol,term)
                           term = term*cos(xi)
                         endif
-                        if (abs(xi)>zero.and.abs(mn2k-mn1r)==abs(npol)) then
+                        if (abs(xi)>zero.and.abs(mn2k-mn1r+npol*(nphk-nphr))==2) then
                           call vmfdr(n2k,mn2k,nphk,n1r,mn1r,nphr,-npol,term)
                           term = -term*sin(xi)
                         endif
@@ -253,11 +253,11 @@
                       ! <1K|Hm|2R>*krondel(2K,1R)
                       if (ia2k==ia1r) then
                         term  = 0d0
-                        if (abs(mn1k-mn2r)==abs(npol)) then
+                        if (mn1k-mn2r+npol*(nphk-nphr)==0) then
                           call vmfdr(n1k,mn1k,nphk,n2r,mn2r,nphr,npol,term)
                           term = term*cos(xi)
                         endif
-                        if (abs(xi)>zero.and.abs(mn1k-mn2r)==abs(npol)) then
+                        if (abs(xi)>zero.and.abs(mn1k-mn2r+npol*(nphk-nphr))==2) then
                           call vmfdr(n1k,mn1k,nphk,n2r,mn2r,nphr,-npol,term)
                           term = -term*sin(xi)
                         endif
@@ -269,11 +269,11 @@
                       ! <2K|Hm|2R>*krondel(1K,1R)
                       if (ia1k==ia1r) then
                         term  = 0d0
-                        if (abs(mn2k-mn2r)==abs(npol)) then
+                        if (mn2k-mn2r+npol*(nphk-nphr)==0) then
                           call vmfdr(n2k,mn2k,nphk,n2r,mn2r,nphr,npol,term)
                           term = term*cos(xi)
                         endif
-                        if (abs(xi)>zero.and.abs(mn2k-mn1r)==abs(npol)) then
+                        if (abs(xi)>zero.and.abs(mn2k-mn2r+npol*(nphk-nphr))==2) then
                           call vmfdr(n2k,mn2k,nphk,n2r,mn2r,nphr,-npol,term)
                           term = -term*sin(xi)
                         endif
@@ -361,11 +361,11 @@
                   ! <1C|Hm|1K>*krondel(2C,2K)
                   if (ia2c==ia2k) then
                     term = 0d0
-                    if (abs(mn1c-mn1k)==abs(npol)) then
+                    if (mn1c-mn1k+npol*(nphc-nphk)==0) then
                       call vmfdr(n1c,mn1c,nphc,n1k,mn1k,nphk,npol,term)
                       term = term*cos(xi)
                     endif
-                    if (abs(xi)>zero.and.abs(mn1c-mn1k)==abs(npol)) then
+                    if (abs(xi)>zero.and.abs(mn1c-mn1k+npol*(nphc-nphk))==2) then
                       call vmfdr(n1c,mn1c,nphc,n1k,mn1k,nphk,-npol,term)
                       term = -term*sin(xi)
                     endif
@@ -376,11 +376,11 @@
                     ! <2C|Hm|1K>*krondel(1C,2K)
                     if (ia1c==ia2k) then
                       term = 0d0
-                      if (abs(mn2c-mn1k)==abs(npol)) then
+                      if (mn2c-mn1k+npol*(nphc-nphk)==0) then
                         call vmfdr(n2c,mn2c,nphc,n1k,mn1k,nphk,npol,term)
                         term = term*cos(xi)
                       endif
-                      if (abs(xi)>zero.and.abs(mn2c-mn1k)==abs(npol)) then
+                      if (abs(xi)>zero.and.abs(mn2c-mn1k+npol*(nphc-nphk))==2) then
                         call vmfdr(n2c,mn2c,nphc,n1k,mn1k,nphk,-npol,term)
                         term = -term*sin(xi)
                       endif
@@ -392,11 +392,11 @@
                     ! <1C|Hm|2K>*krondel(2C,1K)
                     if (ia2c==ia1k) then
                       term = 0d0
-                      if (abs(mn1c-mn2k)==abs(npol)) then
+                      if (mn1c-mn2k+npol*(nphc-nphk)==0) then
                         call vmfdr(n1c,mn1c,nphc,n2k,mn2k,nphk,npol,term)
                         term = term*cos(xi)
                       endif
-                      if (abs(xi)>zero.and.abs(mn1c-mn2k)==abs(npol)) then
+                      if (abs(xi)>zero.and.abs(mn1c-mn2k+npol*(nphc-nphk))==2) then
                         call vmfdr(n1c,mn1c,nphc,n2k,mn2k,nphk,-npol,term)
                         term = -term*sin(xi)
                       endif
@@ -408,11 +408,11 @@
                     ! <2C|Hm|2K>*krondel(1C,1K)
                     if (ia1c==ia1k) then
                       term = 0d0
-                      if (abs(mn2c-mn2k)==abs(npol)) then
+                      if (mn2c-mn2k+npol*(nphc-nphk)==0) then
                         call vmfdr(n2c,mn2c,nphc,n2k,mn2k,nphk,npol,term)
                         term = term*cos(xi)
                       endif
-                      if (abs(xi)>zero.and.abs(mn2c-mn1k)==abs(npol)) then
+                      if (abs(xi)>zero.and.abs(mn2c-mn2k+npol*(nphc-nphk))==2) then
                         call vmfdr(n2c,mn2c,nphc,n2k,mn2k,nphk,-npol,term)
                         term = -term*sin(xi)
                       endif
@@ -486,8 +486,9 @@
               if (iham==mxlam+1.and.icol==irow) then
                 ! dc Stark+rotation+MW detuning
                 vl(iham,irow,icol) = 1d0
-                cycle
               endif
+
+              if (iham==mxlam+1) cycle
 
               ! Photon states must differ by 1 quantum
               if (abs(nphc-nphr)/=1) cycle
@@ -496,12 +497,11 @@
               ! <1C|Hm|1R>*krondel(2C,2R)
               if (ia2c==ia2r) then
                 term = 0d0
-                if (iham==mxlam+2.and.abs(mn1c-mn1r)==abs(npol)) then
+                if (mn1c-mn1r+npol*(nphc-nphr)==0) then
                   call vmfdr(n1c,mn1c,nphc,n1r,mn1r,nphr,npol,term)
                   term = term*cos(xi)
                 endif
-                if (iham==mxlam+3.and.abs(xi)>zero.and.&
-                        abs(mn1c-mn1r)==abs(npol)) then
+                if (abs(xi)>zero.and.abs(mn1c-mn1r+npol*(nphc-nphr))==2) then
                   call vmfdr(n1c,mn1c,nphc,n1r,mn1r,nphr,-npol,term)
                   term = -term*sin(xi)
                 endif
@@ -513,12 +513,11 @@
                 ! <2C|Hm|1R>*krondel(1C,2R)
                 if (ia1c==ia2r) then
                   term = 0d0
-                  if (iham==mxlam+2.and.abs(mn2c-mn1r)==abs(npol)) then
+                  if (mn2c-mn1r+npol*(nphc-nphr)==0) then
                     call vmfdr(n2c,mn2c,nphc,n1r,mn1r,nphr,npol,term)
                     term = term*cos(xi)
                   endif
-                  if (iham==mxlam+3.and.abs(xi)>zero.and.&
-                          abs(mn2c-mn1r)==abs(npol)) then
+                  if (abs(xi)>zero.and.abs(mn2c-mn1r+npol*(nphc-nphr))==2) then
                     call vmfdr(n2c,mn2c,nphc,n1r,mn1r,nphr,-npol,term)
                     term = -term*sin(xi)
                   endif
@@ -531,12 +530,11 @@
                 ! <1C|Hm|2R>*krondel(2C,1R)
                 if (ia2c==ia1r) then
                   term  = 0d0
-                  if (iham==mxlam+2.and.abs(mn1c-mn2r)==abs(npol)) then
+                  if (mn1c-mn2r+npol*(nphc-nphr)==0) then
                     call vmfdr(n1c,mn1c,nphc,n2r,mn2r,nphr,npol,term)
                     term = term*cos(xi)
                   endif
-                  if (iham==mxlam+3.and.abs(xi)>zero.and.&
-                          abs(mn1c-mn2r)==abs(npol)) then
+                  if (abs(xi)>zero.and.abs(mn1c-mn2r+npol*(nphc-nphr))==2) then
                     call vmfdr(n1c,mn1c,nphc,n2r,mn2r,nphr,-npol,term)
                     term = -term*sin(xi)
                   endif
@@ -549,12 +547,11 @@
                 ! <2C|Hm|2R>*krondel(1C,1R)
                 if (ia1c==ia1r) then
                   term  = 0d0
-                  if (iham==mxlam+2.and.abs(mn2c-mn2r)==abs(npol)) then
+                  if (mn2c-mn2r+npol*(nphc-nphr)==0) then
                     call vmfdr(n2c,mn2c,nphc,n2r,mn2r,nphr,npol,term)
                     term = term*cos(xi)
                   endif
-                  if (iham==mxlam+3.and.abs(xi)>zero.and.&
-                          abs(mn2c-mn1r)==abs(npol)) then
+                  if (abs(xi)>zero.and.abs(mn2c-mn2r+npol*(nphc-nphr))==2) then
                     call vmfdr(n2c,mn2c,nphc,n2r,mn2r,nphr,-npol,term)
                     term = -term*sin(xi)
                   endif
